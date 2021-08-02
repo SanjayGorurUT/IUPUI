@@ -1,13 +1,21 @@
-Some patient graph analysis that's being done last minute like all expertly-crafted things
-
 **Prediction task**: 30 day patient mortality in the ICU
 
-Identify patient traits/demographics to help with this prediction
+Identify patient traits/demographics to help with this prediction. Subject_id is effectively patient id
 
 **Proposed CSV files**:
 * admissions.csv
+  * subject_id
+  * admission_type
+  * ethnicity
+  * diagnosis (on admission, could change)
 * patients.csv
+  * subject_id
+  * gender
+  * dob (age)
 * icustays.csv
+  * subject_id
+  * icustay_id (maybe get a count? or see if it's multiple icu visits in same hospital stay (hadm_id))
+  * length of stay
 
 **To Consider**:
 * labevents.csv (d_labitems.csv)
