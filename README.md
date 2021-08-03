@@ -1,6 +1,19 @@
 **Prediction task**: 30 day patient mortality in the ICU
 
-Identify patient traits/demographics to help with this prediction. Subject_id is effectively patient id
+**To-Do**
+- [ ] Identify patient traits/demographics to help with this prediction. Subject_id is effectively patient id
+- [ ] Pull information out of csv files
+   - [ ] Read up on extracting information per row header
+   - [ ] Extract per subject_id, construct into vector
+   - [ ] Read Rocheteau et al, 2021 for how they calculated a similarity score for difficult things like diagnosis similarity
+   - [ ] Normalize vector (Rocheteau et al, 2021 went -1 and 1 for 5th and 95th percentile. Extremes -4, 4)
+- [ ] Construct graph
+   - [ ] Cosine similarity on all pairs of vectors
+   - [ ] Build an edge (x,y) for similarity scores over threshold (TBD)
+- [ ] Run through a graph neural network (cluster-GCN)
+   - [ ] Predict on patient mortality (0/1, no/yes)
+
+**Reminder to save some data for the testing portion, not everything goes into training (preferrably)
 
 **Proposed CSV files**:
 * admissions.csv
@@ -19,7 +32,7 @@ Identify patient traits/demographics to help with this prediction. Subject_id is
 * prescriptions.csv
   * subject_id
   * drug_name_generic
- * diagnoses_icd.csv
+* diagnoses_icd.csv
   * subject_id
   * d_icd_diagnoses (for identifying what the codes mean)
   * seq_num defines the priority, 1 being highest
