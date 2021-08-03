@@ -13,7 +13,7 @@
 - [ ] Run through a graph neural network (cluster-GCN)
    - [ ] Predict on patient mortality (0/1, no/yes)
 
-**Reminder to save some data for the testing portion, not everything goes into training (preferrably)
+**Reminder to save some data for the testing portion, not everything goes into training (preferrably)**
 
 **Proposed CSV files**:
 * admissions.csv
