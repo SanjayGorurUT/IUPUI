@@ -10,6 +10,8 @@
 - [ ] Construct graph
    - [ ] Cosine similarity on all pairs of vectors
    - [ ] Build an edge (x,y) for similarity scores over threshold (TBD)
+- [ ] Setup labels for dataset (mortality, 0/1)
+   - [ ] Keep a portion hidden for testing purposes
 - [ ] Run through a graph neural network (cluster-GCN)
    - [ ] Predict on patient mortality (0/1, no/yes)
 
