@@ -11,12 +11,36 @@ diagnoses_df = pd.read_csv('DIAGNOSES_ICD.csv', usecols = ['SUBJECT_ID', 'SEQ_NU
 print(diagnoses_df)
 print(diagnoses_df["SUBJECT_ID"][0])
 
+print("IDS")
+ids_df = pd.read_csv('id.csv')
+print(ids_df)
+
+print("TEST")
+print(ids_df["id"][0])
+
+#reconstruct id_list
+id_list = []
+
+for x in range(len(ids_df)):
+    id_list.append(ids_df["id"][x])
+
+print(id_list)
+
+print("OVER")
+
 id_set = set();
 
 pat_array = []
 
-#for x in range(0, 651047 + 1):
-for x in range(0, 1000):
+for x in range(0, 651047 + 1):
+#for x in range(0, 1000):
+
+    #is it a subject id we are interested in?
+    if diagnoses_df["SUBJECT_ID"][x] not in id_list:
+        print("NOT IN")
+        print(diagnoses_df["SUBJECT_ID"][x])
+        continue
+    #have we seen this before?
     if diagnoses_df["SUBJECT_ID"][x] not in id_set:
         id_set.add(diagnoses_df["SUBJECT_ID"][x])
         code = diagnoses_df["ICD9_CODE"][x]
@@ -33,12 +57,12 @@ for x in range(0, 1000):
             }
             pat_array.append(diag)
 
-print(pat_array)
+#print(pat_array)
 
 #sort by subject id, ascending
 pat_array = sorted(pat_array, key = lambda i: i['id'])
-print(pat_array)
-print(len(pat_array))
+#print(pat_array)
+#print(len(pat_array))
 
 for x in range(len(pat_array)):
     print(pat_array[x]["id"])
