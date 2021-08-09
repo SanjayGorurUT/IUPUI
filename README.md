@@ -1,15 +1,15 @@
 **Prediction task**: 30 day patient mortality in the ICU
 
 **To-Do**
-- [ ] Identify patient traits/demographics to help with this prediction. Subject_id is effectively patient id
+- [X] Identify patient traits/demographics to help with this prediction. Subject_id is effectively patient id
 - [ ] Pull information out of csv files
-   - [ ] Read up on extracting information per row header
-   - [ ] Extract per subject_id, construct into vector
+   - [X] Read up on extracting information per row header
+   - [X] Extract per subject_id, construct into vector
    - [ ] Read Rocheteau et al, 2021 for how they calculated a similarity score for difficult things like diagnosis similarity
-   - [ ] Normalize vector (Rocheteau et al, 2021 went -1 and 1 for 5th and 95th percentile. Extremes -4, 4)
+   - [X] Normalize vector (Rocheteau et al, 2021 went -1 and 1 for 5th and 95th percentile. Extremes -4, 4)
 - [ ] Construct graph
-   - [ ] Cosine similarity on all pairs of vectors
-   - [ ] Build an edge (x,y) for similarity scores over threshold (TBD)
+   - [ ] Cosine similarity on all pairs of vectors (currently on a diagnosis check)
+   - [X] Build an edge (x,y) for similarity scores over threshold 
 - [ ] Setup labels for dataset (mortality, 0/1)
    - [ ] Keep a portion hidden for testing purposes
 - [ ] Run through a graph neural network (cluster-GCN)
