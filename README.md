@@ -1,4 +1,7 @@
-**Prediction task**: 30 day patient mortality in the ICU
+**Prediction task**: Patient Mortality
+
+**To run the preprocessing, run script.sh**
+Contact Jonathan Wu at jswu72@gatech.edu for any questions about errors in regards to the script.
 
 **To-Do**
 - [X] Identify patient traits/demographics to help with this prediction. Subject_id is effectively patient id
@@ -10,10 +13,10 @@
 - [ ] Construct graph
    - [ ] Cosine similarity on all pairs of vectors (currently on a diagnosis check)
    - [X] Build an edge (x,y) for similarity scores over threshold 
-- [ ] Setup labels for dataset (mortality, 0/1)
-   - [ ] Keep a portion hidden for testing purposes
-- [ ] Run through a graph neural network (cluster-GCN)
-   - [ ] Predict on patient mortality (0/1, no/yes)
+- [X] Setup labels for dataset (mortality, 0/1)
+   - [X] Keep a portion hidden for testing purposes
+- [X] Run through a graph neural network (cluster-GCN)
+   - [X] Predict on patient mortality (0/1, no/yes)
 
 **Reminder to save some data for the testing portion, not everything goes into training (preferrably)**
 
