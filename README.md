@@ -1,6 +1,7 @@
 **Prediction task**: Patient Mortality
 
 **To run the preprocessing, run script.sh**
+
 Contact Jonathan Wu at jswu72@gatech.edu for any questions about errors in regards to the script.
 
 **To-Do**
