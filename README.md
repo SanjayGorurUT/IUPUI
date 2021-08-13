@@ -26,6 +26,10 @@ Contact Jonathan Wu at jswu72@gatech.edu for any questions about errors in regar
 3) Run the bash script script.sh to construct the graph.
 4) Take the csv files placed in ./csv and move them to the input directory of Rozemberczki's implementation of Cluster-GCN: https://github.com/benedekrozemberczki/ClusterGCN
 
+**Note**: When trying to run ClusterGCN there might be a DLL file error for metis. Please go here for further clarification on how to resolve this error: https://metis.readthedocs.io/en/latest/. 
+
+You might need to be redirected to another page to install metis, since `pip install metis` downloads the wrapper, not metis itself.
+
 **Directions to construct and test the graph, without the script**
 
 1) Follow steps 1 and 2 above in the previous section
