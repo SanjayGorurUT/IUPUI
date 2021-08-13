@@ -8,8 +8,7 @@ import math
 #print(admission_df)
 
 #print("DIAGNOSES")
-#diagnoses_df = pd.read_csv('DIAGNOSES_ICD.csv', index_col='SUBJECT_ID', usecols = ['SUBJECT_ID', 'SEQ_NUM', 'ICD9_CODE'])
-diagnoses_df = pd.read_csv('DIAGNOSES_ICD.csv', usecols = ['SUBJECT_ID', 'SEQ_NUM', 'ICD9_CODE'])
+diagnoses_df = pd.read_csv('./sorted/DIAG_SORT.csv', usecols = ['SUBJECT_ID', 'SEQ_NUM', 'ICD9_CODE'])
 #print(diagnoses_df)
 #print(diagnoses_df["SUBJECT_ID"][0])
 
@@ -34,12 +33,15 @@ for x in range(len(ids_df)):
 
 id_set = set();
 
-node_id = 0
-pat_array = []
+pat_id_array = []
+curr = 0
+diagnoses = [] #a list of lists, each list own patients set of diagnoses
+curr_diagnoses = []
+length = 100000
 #this is roughly 400k
 #for x in range(len(diagnoses_df)):
-#100k works
-for x in range(0, 250000):
+#200k works
+for x in range(length):
     if x % 10000 == 0:
         print(x)
 
@@ -48,31 +50,37 @@ for x in range(0, 250000):
         #print("NOT IN")
         #print(diagnoses_df["SUBJECT_ID"][x])
         continue
-    #have we seen this before?
-    if diagnoses_df["SUBJECT_ID"][x] not in id_set:
-        id_set.add(diagnoses_df["SUBJECT_ID"][x])
-        code = diagnoses_df["ICD9_CODE"][x]
+    
+    if curr < diagnoses_df["SUBJECT_ID"][x]:
+        if len(curr_diagnoses) > 0:
+            diagnoses.append(curr_diagnoses)
+        curr_diagnoses = []
+        curr = diagnoses_df["SUBJECT_ID"][x]
 
-        if "V" not in str(code) and "E" not in str(code):
+    code = diagnoses_df["ICD9_CODE"][x]
 
-            #check to see if it's nan or not (sometimes patients get no diagnosis in diagnoses.csv?)
-            if math.isnan(float(code)) is True:
-                continue
+    if "V" not in str(code) and "E" not in str(code):
 
-            #print(diagnoses_df["SUBJECT_ID"][x])
-            element = {
-                "id": diagnoses_df["SUBJECT_ID"][x],
-                #"id": node_id,
-                "diagnosis_code": int(code)
-            }
-            pat_array.append(element)
+        #check to see if it's nan or not (sometimes patients get no diagnosis in diagnoses.csv?)
+        if math.isnan(float(code)) is True:
+            continue
 
-            node_id = node_id + 1
+        #print(diagnoses_df["SUBJECT_ID"][x])
+        curr_diagnoses.append(int(code))
+        if diagnoses_df["SUBJECT_ID"][x] not in pat_id_array:
+            pat_id_array.append(diagnoses_df["SUBJECT_ID"][x])
 
-#print(pat_array)
+    if x == length - 1:
+        if len(curr_diagnoses) > 0:
+            diagnoses.append(curr_diagnoses)
+#print(pat_id_array)
+#print(diagnoses)
 
 #sort by subject id, ascending
-pat_array = sorted(pat_array, key = lambda i: i['id'])
+#only works on the previous implementation, now we have list of lists
+#so doesn't work
+#pat_array = sorted(pat_array, key = lambda i: i['id'])
+
 #print("PAT ARRAY")
 #print(pat_array)
 #print(len(pat_array))
@@ -80,7 +88,7 @@ pat_array = sorted(pat_array, key = lambda i: i['id'])
 #for x in range(len(pat_array)):
 #    print(pat_array[x]["id"])
 
-dimensions = len(pat_array) #create the sparse matrix
+dimensions = len(pat_id_array) #create the sparse matrix
 
 similarity_matrix = [[0 for a in range(dimensions)] for b in range(dimensions)]
 
@@ -88,36 +96,43 @@ similarity_matrix = [[0 for a in range(dimensions)] for b in range(dimensions)]
 
 #get ids of all elements in pat_array, these are the new id_list
 temp_list = []
+#print("LENGTH")
+#print(len(pat_id_array))
+#print(len(diagnoses))
 
+threshold = 0.5
 for x in range(dimensions):
     for y in range(x + 1, dimensions):
         if x == y: 
             continue
+            
         #if diagnoses_df["ICD9_CODE"][x] == diagnoses_df["ICD9_CODE"][y]:
-        if pat_array[x]["diagnosis_code"] % 1000 == pat_array[y]["diagnosis_code"] % 1000:
-            #print("MATCH")
-            #print(x)
-            #print(y)
-            similarity_matrix[x][y] = 1
+        #print(pat_id_array[x])
 
-            if pat_array[x]["id"] not in temp_list:
-                temp_list.append(pat_array[x]["id"])
+        y_diagnoses = []
+        for a in range(len(diagnoses[y])):
+            #print(diagnoses[y][a] % 1000)
+            y_diagnoses.append(diagnoses[y][a] % 1000)
 
-            if pat_array[y]["id"] not in temp_list:
-                temp_list.append(pat_array[y]["id"])
-        else:
-            similarity_matrix[x][y] = 0
-
-#for x in range(len(similarity_matrix[0])):
-#    print(similarity_matrix[x])
-
+        for z in range(len(diagnoses[x])):
+            if diagnoses[x][z] % 1000 in y_diagnoses:
+                #print("MATCH")
+                #print(x)
+                #print(y)
+                similarity_matrix[x][y] = similarity_matrix[x][y] + .3
+            
+            if similarity_matrix[x][y] > threshold:
+                if pat_id_array[x] not in temp_list:
+                    temp_list.append(pat_id_array[x])
+                if pat_id_array[y] not in temp_list:
+                    temp_list.append(pat_id_array[y])
 
 temp_list.sort()
+#print(temp_list)
 #print("sorted")
 #print(temp_list)
 
 #construct edge csv file
-threshold = 0.5
 
 edge_dict = []
 for x in range(dimensions):
@@ -127,15 +142,15 @@ for x in range(dimensions):
         if similarity_matrix[x][y] > threshold:
 
             entry = {
-                "id1": temp_list.index(pat_array[x]["id"]),
-                "id2": temp_list.index(pat_array[y]["id"])
+                "id1": temp_list.index(pat_id_array[x]),
+                "id2": temp_list.index(pat_id_array[y])
             }
             edge_dict.append(entry)
 
             #add the reverse pair
             entry2 = {
-                "id1": temp_list.index(pat_array[y]["id"]),
-                "id2": temp_list.index(pat_array[x]["id"])
+                "id1": temp_list.index(pat_id_array[y]),
+                "id2": temp_list.index(pat_id_array[x])
             }
             edge_dict.append(entry2)
 
