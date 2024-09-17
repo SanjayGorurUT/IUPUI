@@ -2,7 +2,7 @@
 
 **Details below in constructing and testing the graph**
 
-Contact Jonathan Wu at jswu72@gatech.edu for any questions about errors in regards to the script.
+Contact Sanjay Gorur at sanjaygorur2001@utexas.edu for any questions about errors in regards to the script.
 
 **To-Do**
 - [X] Identify patient traits/demographics to help with this prediction. Subject_id is effectively patient id
